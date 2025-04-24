@@ -5,6 +5,7 @@ Collection of a single function web "frameworks"
 ### Functions
 
 - [template_inflate](./template_inflate/)
+- [element_classes](./element_classes/)
 
 
 ## Guidelines

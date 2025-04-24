@@ -4,8 +4,7 @@ test: node_modules
 	ls */dev/test.js | xargs -n1 node
 
 node_modules:
-	npm install --save-dev jsdom chai
-	rm package*
+	npm install --no-save jsdom chai
 
 clean:
-	rm node_modules
+	rm -rf node_modules
