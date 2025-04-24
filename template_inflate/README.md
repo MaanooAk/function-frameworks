@@ -22,6 +22,11 @@ options = {
 }
 ```
 
+The default *placeholder*
+- expression handler is `eval`
+- html rendered is the `innerHTML`
+
+
 ## Examples
 
 ```html
@@ -49,5 +54,3 @@ options = {
     </div>
 </div>
 ```
-
-###
