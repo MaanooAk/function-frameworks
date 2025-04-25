@@ -149,6 +149,19 @@ function binds_update(root = document, options) {
         return true;
     }
 
+    function clean_elements() { // TODO: test
+        const reduced = [];
+        for (const i of elements) {
+            if (!elements[i].updaters.length) continue;
+            reduced.push(i);
+        }
+        elements.length = reduced.length;
+        for (let i = 0; i < reduced.length; i++) {
+            elements[i] = reduced[i];
+        }
+        elements_dead = 0;
+    }
+
     binds_update = function binds_update(root = document, options_param) {
         const options = calc_options(options_param);
 
@@ -164,6 +177,10 @@ function binds_update(root = document, options) {
                 element.setAttribute(options.reflect, defs_text);
             }
             element.removeAttribute(options.attr);
+        }
+
+        if (elements_dead > elements.length / 2) {
+            clean_elements();
         }
 
         const root_element = find_root(root);

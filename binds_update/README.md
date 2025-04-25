@@ -5,7 +5,7 @@ Bind expressions with element properties with attributes
 Features: customizable, javascript expression, minimal DOM changed with caching 
 
 ```js
-binds_update((root = document), options);
+binds_update(root = document, options);
 ```
 
 ```js
