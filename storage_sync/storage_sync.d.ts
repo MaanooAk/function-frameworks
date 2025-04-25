@@ -4,7 +4,7 @@ export type StorageSyncInfo = {
     /** Storage key name (required for sync) */
     name: string;
     /** Current version of the object (default: 1) */
-    version: string | number;
+    version: number;
     /** Migration function(s) to upgrade older versions to current version */
     migrate: MigrateFunction | Record<string, MigrateFunction>;
     /** Whether to track this object for future saves (default: true) */

@@ -65,7 +65,7 @@ function storage_sync(object, info, options) {
         const index = text.indexOf(" ");
         return {
             object: parse(text.substring(index + 1)),
-            version: text.substring(0, index),
+            version: +text.substring(0, index),
         }
     }
 

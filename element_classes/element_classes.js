@@ -125,7 +125,7 @@ function element_classes(elements) {
 
     function handler_each(elements, min, max, names_param) {
         if (min < 0 || min > max) throw new Error(`Invalid min max range: ${min}-${max}`);
-        if (names_param.length < min) throw new Error(`Number of names do not satisfy th range`)
+        if (names_param.length < min) throw new Error(`Number of names do not satisfy the range`)
 
         const names = new Set(names_param);
         function listener(element, old) {
@@ -136,30 +136,25 @@ function element_classes(elements) {
             const count = has.length;
             if (count >= min && count <= max) return;
 
-            const current_names = new Set(has);
             const prev_names = new Set(old.split(" "));
-
             if (count < min) {
-                const missing_names = names.difference(current_names);
+                const missing_names = new Set(mis);
                 const count_add = min - count;
                 const to_add = Array.from(missing_names.difference(prev_names)).slice(0, count_add);
                 if (to_add.length < count_add) {
                     const left_missing_names = missing_names.intersection(prev_names)
                     to_add.push(...Array.from(left_missing_names).slice(0, count_add - to_add.length))
                 }
-                for (const i of to_add) {
-                    element.classList.add(i)
-                }
+                element.classList.add(...to_add)
             } else { // if (count > max) {
+                const current_names = new Set(has);
                 const count_remove = count - max;
                 const to_remove = Array.from(current_names.intersection(prev_names)).slice(0, count_remove);
                 if (to_remove.length < count_remove) {
                     const left_current_names = current_names.difference(prev_names)
                     to_remove.push(...Array.from(left_current_names).slice(0, count_remove - to_remove.length))
                 }
-                for (const i of to_remove) {
-                    element.classList.remove(i)
-                }
+                element.classList.remove(...to_remove)
             }
         }
 
