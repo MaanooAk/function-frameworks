@@ -138,7 +138,7 @@ function binds_update(root = document, options) {
     }
 
     function update_element({ element, updaters }, options) {
-        if (!document.contains(element)) {
+        if (!element.isConnected) {
             updaters.length = 0;
             elements_dead += 1;
             return false;
@@ -150,14 +150,16 @@ function binds_update(root = document, options) {
     }
 
     function clean_elements() { // TODO: test
+        let start = 0;
+        while (elements[start]?.updaters.length == 0) start++;
         const reduced = [];
-        for (const i of elements) {
-            if (!elements[i].updaters.length) continue;
-            reduced.push(i);
+        for (let i = start; i < elements.length; i++) {
+            if (elements[i].updaters.length == 0) continue;
+            reduced.push(elements[i]);
         }
-        elements.length = reduced.length;
+        elements.length = start + reduced.length;
         for (let i = 0; i < reduced.length; i++) {
-            elements[i] = reduced[i];
+            elements[start + i] = reduced[i];
         }
         elements_dead = 0;
     }
