@@ -6,9 +6,9 @@
  */
 
 /**
- * Bind expressions with element properties with attributes.
+ * Bind expressions with element properties.
  * 
- * @param {Document} [root=document] - Selector string or root element.
+ * @param {Document | Element | string} [root=document] - Selector string or root element.
  * @param {Partial<BindsUpdateOptions>} options - Optional configuration options. 
  */
 function binds_update(root = document, options) {
@@ -36,21 +36,7 @@ function binds_update(root = document, options) {
         return options;
     }
 
-    const types = {
-        "html": (e, v) => e.innerHTML = v,
-        "text": (e, v) => e.innerText = v,
-        "value": (e, v) => e.value = v,
-        "checked": (e, v) => e.checked = !!v,
-        "context": (e, v) => e.context = v,
-        "hidden": (e, v) => e.hidden = !!v,
-    }
-    const dynamic_types = {
-        "class-": (e, v, name) => v ? e.classList.add(name) : e.classList.remove(name),
-        "attr-": (e, v, name) => e.setAttribute(name, v),
-        "var-": (e, v, name) => e.style.setProperty("--" + name, v)
-    }
-
-    function find_root(root, options) {
+    function find_root(root) {
         if (typeof root === "string") {
             const possible = Array.from(document.querySelectorAll(root));
             if (possible.length == 0) throw new Error(`Root selects no elements: ${root}`)
@@ -71,6 +57,20 @@ function binds_update(root = document, options) {
         } else {
             throw new TypeError(`Unsupported root type: ${root}`)
         }
+    }
+
+    const types = {
+        "html": (e, v) => e.innerHTML = v,
+        "text": (e, v) => e.innerText = v,
+        "value": (e, v) => e.value = v,
+        "checked": (e, v) => e.checked = !!v,
+        "context": (e, v) => e.context = v,
+        "hidden": (e, v) => e.hidden = !!v,
+    }
+    const dynamic_types = {
+        "class-": (e, v, name) => v ? e.classList.add(name) : e.classList.remove(name),
+        "attr-": (e, v, name) => e.setAttribute(name, v),
+        "var-": (e, v, name) => e.style.setProperty("--" + name, v)
     }
 
     function parse_defs(text, options) {
@@ -149,7 +149,7 @@ function binds_update(root = document, options) {
         return true;
     }
 
-    function clean_elements() { // TODO: test
+    function clean_elements() {
         let start = 0;
         while (elements[start]?.updaters.length == 0) start++;
         const reduced = [];

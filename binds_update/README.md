@@ -1,6 +1,6 @@
 # binds_update
 
-Bind expressions with element properties with attributes
+Bind expressions with element properties.
 
 Features: customizable, javascript expression, minimal DOM changed with caching 
 

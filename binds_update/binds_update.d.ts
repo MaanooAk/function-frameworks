@@ -75,7 +75,7 @@ interface BindsUpdateOptions {
 /**
  * Bind expression with element properties for all root's children.
  * 
- * @param {Document} [root=document] - Selector string or root element.
+ * @param {Document | Element | string} [root=document] - Selector string or root element.
  * @param {Partial<BindsUpdateOptions>} options - Optional configuration options. 
  */
 declare function binds_update(root?: Element | string, options?: Partial<BindsUpdateOptions>): void;
