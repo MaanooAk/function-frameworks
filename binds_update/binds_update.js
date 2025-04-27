@@ -20,7 +20,7 @@ function binds_update(root = document, options) {
         implicit: "html",
         separator: ";",
         binder: ":",
-        compiler: (expr) => eval(`() => ${expr}`),
+        compiler: (expr) => eval(`(self, context) => ${expr}`),
         remember: true,
         reset: false,
     }
@@ -110,7 +110,7 @@ function binds_update(root = document, options) {
 
         let last = undefined;
         return (ele) => {
-            const value = provider();
+            const value = provider(ele, ele.context);
             if (value === last) return false;
             last = value;
             handler(ele, value, name);

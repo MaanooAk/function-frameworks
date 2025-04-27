@@ -7,7 +7,7 @@ $(FF).js: */*.js
 	cat */*.js | grep -v '^export' > $(FF).js
 
 test: node_modules */*.js */dev/*.js
-	ls */dev/test.js | xargs -n1 node
+	ls */dev/test.js | xargs -n1 -P0 node
 
 node_modules:
 	npm install --no-save jsdom chai

@@ -125,12 +125,37 @@ var tests = {
         el.innerHTML = `<div data-bind="unknown: 123"></div>`;
         document.body.appendChild(el);
         expect(() => binds_update(el)).to.throw;
+        el.remove()
     },
     "unknown dynamic binding type": () => {
         const el = document.createElement("div");
         el.innerHTML = `<div data-bind="unknown-dynamic: 123"></div>`;
         document.body.appendChild(el);
         expect(() => binds_update(el)).to.throw;
+        el.remove()
+    },
+    "cleanup": () => {
+        global.counter2 = 0
+        const el = document.createElement("div");
+        el.innerHTML = `
+            <div data-bind="counter2++"></div>
+            <div data-bind="counter2++"></div>
+            <div data-bind="counter2++"></div>
+            <span data-bind="counter2++"></span>
+        `;
+        document.body.appendChild(el);
+        binds_update();
+        expect(global.counter2).eq(4);
+        binds_update();
+        expect(global.counter2).eq(8);
+        el.querySelectorAll("div").forEach(i => i.remove())
+        binds_update();
+        expect(global.counter2).eq(9);
+        binds_update();
+        expect(global.counter2).eq(10);
+        el.remove()
+        binds_update();
+        expect(global.counter2).eq(10);
     }
 }
 
