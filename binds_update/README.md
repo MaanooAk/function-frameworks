@@ -16,7 +16,7 @@ options: {
   implicit: "html",
   separator: ";",
   binder: ":",
-  compiler: (expr) => eval(`() => ${expr}`),
+  compiler: (expr) => eval(`(self, context) => ${expr}`),
   remember: true,
   reset: false,
 }

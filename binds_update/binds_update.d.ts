@@ -55,9 +55,9 @@ interface BindsUpdateOptions {
 
     /**
      * A function to evaluate binding expressions. By default, it uses eval to compile expressions.
-     * @default (expr) => eval(`() => ${expr}`)
+     * @default (expr) => eval(`(self, context) => ${expr}`)
      */
-    compiler: (expr: string) => () => any;
+    compiler: (expr: string) => (self: any, context: any) => any;
 
     /**
      * If true, remembers the options for future calls. If false, options are not remembered.
