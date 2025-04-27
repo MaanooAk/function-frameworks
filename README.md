@@ -8,6 +8,7 @@ Collection of a single function web "frameworks"
 - [element_classes](./element_classes/)
 - [storage_sync](./storage_sync/)
 - [binds_update](./binds_update)
+- [lists_update](./lists_update)
 
 
 ## Guidelines
