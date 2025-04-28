@@ -124,14 +124,14 @@ var tests = {
         const el = document.createElement("div");
         el.innerHTML = `<div data-bind="unknown: 123"></div>`;
         document.body.appendChild(el);
-        expect(() => binds_update(el)).to.throw;
+        expect(() => binds_update(el)).to.throw();
         el.remove()
     },
     "unknown dynamic binding type": () => {
         const el = document.createElement("div");
         el.innerHTML = `<div data-bind="unknown-dynamic: 123"></div>`;
         document.body.appendChild(el);
-        expect(() => binds_update(el)).to.throw;
+        expect(() => binds_update(el)).to.throw();
         el.remove()
     },
     "cleanup": () => {
