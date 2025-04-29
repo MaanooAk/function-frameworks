@@ -19,6 +19,7 @@ options: {
   compiler: (expr) => eval(`(self, context) => ${expr}`),
   remember: true,
   reset: false,
+  extensions: {},
 }
 ```
 

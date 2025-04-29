@@ -39,7 +39,6 @@ var tests = {
         const el = document.createElement("div");
         el.innerHTML = `<div data-bind="class-active: isActive"></div>`;
         document.body.appendChild(el);
-        debugger;
         expect(el.innerHTML).eq(`<div data-bind="class-active: isActive"></div>`);
         binds_update(el);
         expect(el.innerHTML).eq(`<div data-bond="class-active: isActive" class="active"></div>`);
@@ -156,7 +155,32 @@ var tests = {
         el.remove()
         binds_update();
         expect(global.counter2).eq(10);
-    }
+    },
+    "extension binding inner text": () => {
+        const el = document.createElement("div");
+        el.innerHTML = `<div data-bind="text: 'test'"></div>`;
+        document.body.appendChild(el);
+        binds_update()
+        expect(el.innerHTML).eq(`<div data-bond="text: 'test'">test</div>`);
+        el.remove()
+    },
+    "extension binding type": () => {
+        const el = document.createElement("div");
+        el.innerHTML = `<div data-bind="int: 123.12"></div>`;
+        document.body.appendChild(el);
+        expect(() => binds_update()).to.throw();
+        binds_update(el, {
+            extensions: {
+                "int": (e, v) => e.innerHTML = Math.round(v),
+                "yes": (e, v) => e.textContent = v ? "yes" : "no",
+            }
+        })
+        expect(el.innerHTML).eq(`<div data-bond="int: 123.12">123</div>`);
+        el.innerHTML = `<div data-bind="yes: 123.12"></div>`;
+        binds_update();
+        expect(el.innerHTML).eq(`<div data-bond="yes: 123.12">yes</div>`);
+        el.remove()
+    },
 }
 
 for (const name in tests) {

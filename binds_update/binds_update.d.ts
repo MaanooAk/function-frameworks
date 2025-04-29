@@ -70,6 +70,12 @@ interface BindsUpdateOptions {
      * @default false
      */
     reset: boolean;
+
+    /**
+     * If true, resets any remembered options, clearing previously saved options.
+     * @default {}
+     */
+    extensions: Record<string, (element: Element, value: any) => any>;
 }
 
 /**

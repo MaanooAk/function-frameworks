@@ -23,6 +23,7 @@ function binds_update(root = document, options) {
         compiler: (expr) => eval(`(self, context) => ${expr}`),
         remember: true,
         reset: false,
+        extensions: {},
     }
     let remembered_options = {};
 
@@ -61,7 +62,8 @@ function binds_update(root = document, options) {
 
     const types = {
         "html": (e, v) => e.innerHTML = v,
-        "text": (e, v) => e.innerText = v,
+        "text": (e, v) => e.textContent = v,
+        "number": (e, v) => e.textContent = v?.toLocaleString(),
         "value": (e, v) => e.value = v,
         "checked": (e, v) => e.checked = !!v,
         "context": (e, v) => e.context = v,
@@ -88,24 +90,31 @@ function binds_update(root = document, options) {
         if (!trimmed) return null;
 
         const index = trimmed.indexOf(options.binder);
-        if (index == -1) return create_updater(options.implicit, null, trimmed, options);
+        if (index == -1) return create_updater(types[options.implicit], null, trimmed, options);
 
         const type = trimmed.substring(0, index).trim();
         const expr = trimmed.substring(index + 1).trim();
-        if (types[type]) return create_updater(type, null, expr, options);
+        const types_type = types[type];
+        if (types_type) return create_updater(types_type, null, expr, options);
+
+        const extension_type = options.extensions[type];
+        if (extension_type) return create_updater(extension_type, null, expr, options);
 
         const type_index = type.indexOf("-");
         if (type_index == -1) throw new Error(`Unknown type '${type}' in: ${text}`);
 
         const prefix = type.substring(0, type_index + 1)
         const name = type.substring(type_index + 1)
-        if (dynamic_types[prefix]) return create_updater(prefix, name, expr, options)
+        const dynamic_types_type = dynamic_types[prefix];
+        if (dynamic_types_type) return create_updater(dynamic_types_type, name, expr, options)
+
+        const extension_dynamic_type = options.extensions[prefix];
+        if (extension_dynamic_type) return create_updater(extension_dynamic_type, name, expr, options);
 
         throw new Error(`Unknown dynamic type '${prefix}' in: ${text}`);
     }
 
-    function create_updater(type, name, expr, options) {
-        const handler = name === null ? types[type] : dynamic_types[type];
+    function create_updater(handler, name, expr, options) {
         const provider = options.compiler(expr);
 
         let last = undefined;

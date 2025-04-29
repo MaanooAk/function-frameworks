@@ -1,6 +1,6 @@
 # function-frameworks
 
-Collection of a single function web "frameworks"
+Collection of a single function web "frameworks" (not really - they're just libraries)
 
 ### Functions
 
