@@ -22,10 +22,36 @@ var tests = {
         expect(result).eq("Hello, Alice!");
     },
     "handle HTMLTemplateElement input": () => {
-        const template = document.createElement("template");
-        template.innerHTML = "<div>{{ self.value }}</div>";
-        const result = template_inflate(template, { value: "42" });
-        expect(result).eq("<div>42</div>");
+        {
+            const template = document.createElement("template");
+            template.innerHTML = "<div>{{ self.value }}</div>";
+            const result = template_inflate(template, { value: "42" });
+            expect(result).eq("<div>42</div>");
+        }
+        {
+            const template = document.createElement("template");
+            template.innerHTML = "<div>{{ self.value > 10 }}</div>";
+            const result = template_inflate(template, { value: "42" });
+            expect(result).eq("<div>true</div>");
+        }
+        {
+            const template = document.createElement("template");
+            template.innerHTML = "<div>{{ self.value < 11 }}</div>";
+            const result = template_inflate(template, { value: "42" });
+            expect(result).eq("<div>false</div>");
+        }
+        {
+            const template = document.createElement("template");
+            template.innerHTML = "<div>{{ self.value && false }}</div>";
+            const result = template_inflate(template, { value: "42" });
+            expect(result).eq("<div>false</div>");
+        }
+        {
+            const template = document.createElement("template");
+            template.innerHTML = "<div>{{ self.value < 12 }}<template></template></div>";
+            const result = template_inflate(template, { value: "42" });
+            expect(result).eq("<div>false<template></template></div>");
+        }
     },
     "handle HTMLElement input": () => {
         const div = document.createElement("div");

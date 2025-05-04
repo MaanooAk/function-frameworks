@@ -123,7 +123,7 @@ function template_inflate(template, self, options) {
 
             parts.push(
                 source.substring(start, brackets_open),
-                source.substring(brackets_open + options.open.length, brackets_close)
+                unescape_entities(source.substring(brackets_open + options.open.length, brackets_close))
             )
             i = brackets_close + options.close.length;
 
@@ -151,12 +151,21 @@ function template_inflate(template, self, options) {
 
             parts.push(
                 source.substring(i, brackets_open),
-                source.substring(brackets_open + options.open.length, brackets_close)
+                unescape_entities(source.substring(brackets_open + options.open.length, brackets_close))
             )
             i = brackets_close + options.close.length;
         }
 
         return parts;
+    }
+
+    function unescape_entities(text) {
+        if (text.indexOf("&") === -1) return text;
+        // TODO improve
+        return text
+            .replaceAll("&lt;", "<")
+            .replaceAll("&gt;", ">")
+            .replaceAll("&amp;", "&")
     }
 
     function inflate_parsed(parsed, self, options) {
