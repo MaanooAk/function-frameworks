@@ -119,11 +119,19 @@ function binds_update(root = document, options) {
 
         let last = undefined;
         return (ele) => {
-            const value = provider(ele, ele.context);
+            const value = provider(ele, find_context(ele));
             if (value === last) return false;
             last = value;
             handler(ele, value, name);
             return true;
+        }
+    }
+
+    function find_context(element) {
+        while (element) {
+            const context = element.context;
+            if (context) return context;
+            element = element.parentElement;
         }
     }
 

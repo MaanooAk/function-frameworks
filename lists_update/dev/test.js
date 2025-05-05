@@ -177,6 +177,42 @@ var tests = {
 
         expect(() => lists_update(el)).to.throw(/Template must contain an element/);
     },
+    "shuffling list": () => {
+        const el = document.createElement("div");
+        el.innerHTML = `
+            <div data-list="something">
+                <template><p>{{}}</p></template>
+                <div></div>
+            </div>
+        `;
+        document.body.appendChild(el);
+        const container = el.querySelector("[data-list] > div");
+
+        global.something = Array.from({ length: 20 }, (i, index) => index);
+        for (let i = 0; i < 100; i++) {
+            global.something = global.something.map(i => [Math.random(), i]).sort().map(i => i[1]);
+            lists_update(el);
+            expect(container.innerHTML).eq(global.something.map(i => `<p>${i}</p>`).join(""));
+        }
+    },
+    "mutating list": () => {
+        const el = document.createElement("div");
+        el.innerHTML = `
+            <div data-list="something">
+                <template><p>{{}}</p></template>
+                <div></div>
+            </div>
+        `;
+        document.body.appendChild(el);
+        const container = el.querySelector("[data-list] > div");
+
+        global.something = Array.from({ length: 20 }, (i, index) => index);
+        for (let i = 0; i < 400; i++) {
+            global.something[(Math.random() * global.something.length) | 0] = 20 + i;
+            lists_update(el);
+            expect(container.innerHTML).eq(global.something.map(i => `<p>${i}</p>`).join(""));
+        }
+    },
 }
 
 for (const name in tests) {

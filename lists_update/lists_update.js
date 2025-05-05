@@ -110,21 +110,25 @@ function lists_update(root = document, options) {
     }
 
     function update_list(element, container, provider, keys, template_html, options) {
-        const current_list = provider(element, element.context);
+        const current_list = provider(element, find_context(element));
 
         const current_keys = current_list.map(i => options.key(i));
         if (same_arrays(current_keys, keys)) return;
+
+        const common_prefix = common_prefix_length(current_keys, keys);
+        const common_postfix = common_postfix_length(current_keys, keys);
+        const common = common_prefix + common_postfix;
         keys.length = 0;
         keys.push(...current_keys);
 
         const old = new Map();
-        while (container.children.length) {
-            const child = container.children[0];
+        while (container.children.length > common) {
+            const child = container.children[common_prefix];
             child.remove();
             old.set(child[options.lock], child);
         }
 
-        for (let i = 0; i < current_list.length; i++) {
+        for (let i = common_prefix; i < current_list.length - common_postfix; i++) {
             const self = current_list[i];
             const key = current_keys[i];
 
@@ -135,7 +139,23 @@ function lists_update(root = document, options) {
 
             item.context = self;
             item[options.lock] = key;
-            container.appendChild(item);
+            insert_child(container, i, item);
+        }
+    }
+
+    function insert_child(container, index, child) {
+        if (index >= container.children.length) {
+            container.appendChild(child)
+        } else {
+            container.insertBefore(child, container.children[index])
+        }
+    }
+
+    function find_context(element) {
+        while (element) {
+            const context = element.context;
+            if (context) return context;
+            element = element.parentElement;
         }
     }
 
@@ -145,6 +165,22 @@ function lists_update(root = document, options) {
             if (a1[i] !== a2[i]) return false;
         }
         return true;
+    }
+
+    function common_prefix_length(a1, a2) {
+        const max = Math.min(a1.length, a2.length);
+        for (let i = 0; i < max; i++) {
+            if (a1[i] !== a2[i]) return i;
+        }
+        return max;
+    }
+
+    function common_postfix_length(a1, a2) {
+        const max = Math.min(a1.length, a2.length);
+        for (let i = 0; i < max; i++) {
+            if (a1[a1.length - 1 - i] !== a2[a2.length - 1 - i]) return i;
+        }
+        return max;
     }
 
     const elements = [];
