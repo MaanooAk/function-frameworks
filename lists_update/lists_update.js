@@ -121,6 +121,37 @@ function lists_update(root = document, options) {
         keys.length = 0;
         keys.push(...current_keys);
 
+        if (container.moveBefore) {
+
+            const old = new Map();
+            for (let i = common_prefix; i < container.children.length - common_postfix; i++) {
+                const child = container.children[i];
+                old.set(child[options.lock], child);
+            }
+
+            for (let i = common_prefix; i < current_list.length - common_postfix; i++) {
+                const self = current_list[i];
+                const key = current_keys[i];
+
+                let item = old.get(key);
+                if (!item) {
+                    item = options.inflater(template_html, self);
+                    item.context = self;
+                    item[options.lock] = key;
+                    insert_child(container, i, item);
+                } else {
+                    move_child(container, i, item);
+                }
+            }
+
+            while (container.children.length > current_list.length) {
+                const child = container.children[current_list.length - common_postfix];
+                child.remove();
+            }
+
+            return;
+        }
+
         const old = new Map();
         while (container.children.length > common) {
             const child = container.children[common_prefix];
@@ -148,6 +179,14 @@ function lists_update(root = document, options) {
             container.appendChild(child)
         } else {
             container.insertBefore(child, container.children[index])
+        }
+    }
+
+    function move_child(container, index, child) {
+        if (index >= container.children.length) {
+            container.appendChild(child)
+        } else {
+            container.moveBefore(child, container.children[index])
         }
     }
 
