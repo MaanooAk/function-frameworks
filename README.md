@@ -9,6 +9,7 @@ Collection of a single function web "frameworks" (not really - they're just libr
 - [storage_sync](./storage_sync/)
 - [binds_update](./binds_update)
 - [lists_update](./lists_update)
+- [start_updater](./start_updater)
 
 
 ## Guidelines
