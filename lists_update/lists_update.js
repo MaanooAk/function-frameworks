@@ -100,7 +100,7 @@ function lists_update(root = document, options) {
         }
         const template_html = template_element.innerHTML;
 
-        const container = options.container ? element.querySelector("div, span") : element;
+        const container = options.container ? (element.querySelector("div, span") || element) : element;
         container.innerHTML = "";
 
         const provider = options.compiler(expr);
