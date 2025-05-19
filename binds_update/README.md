@@ -17,6 +17,7 @@ options: {
   separator: ";",
   binder: ":",
   compiler: (expr) => eval(`(self, context) => ${expr}`),
+  visibility: false,
   remember: true,
   reset: false,
   extensions: {},

@@ -60,6 +60,12 @@ interface BindsUpdateOptions {
     compiler: (expr: string) => (self: any, context: any) => any;
 
     /**
+     * If true, will update only elements that are currently visible.
+     * @default false
+     */
+    visibility: boolean;
+
+    /**
      * If true, remembers the options for future calls. If false, options are not remembered.
      * @default true
      */

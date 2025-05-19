@@ -1,6 +1,6 @@
 /**
  * binds_update.js
- * version: 0.1
+ * version: 0.2
  * author: Akritas Akritidis
  * repo: https://github.com/MaanooAk/function-frameworks
  */
@@ -21,6 +21,7 @@ function binds_update(root = document, options) {
         separator: ";",
         binder: ":",
         compiler: (expr) => eval(`(self, context) => ${expr}`),
+        visibility: false,
         remember: true,
         reset: false,
         extensions: {},
@@ -119,6 +120,7 @@ function binds_update(root = document, options) {
 
         let last = undefined;
         return (ele) => {
+            if (options.visibility && !ele.parentElement.checkVisibility()) return false;
             const value = provider(ele, find_context(ele));
             if (value === last) return false;
             last = value;
