@@ -10,6 +10,7 @@ Collection of a single function web "frameworks" (not really - they're just libr
 - [binds_update](./binds_update)
 - [lists_update](./lists_update)
 - [start_updater](./start_updater)
+- [safe_guard](./safe_guard)
 
 
 ## Guidelines
