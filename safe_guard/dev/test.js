@@ -50,6 +50,16 @@ var tests = {
         expect(() => hello(1, 2, 3)).to.throw(/Overflowed 1/);
         expect(() => hello(1, 2, 3, 4)).to.throw(/Overflowed 2/);
     },
+    "function_spread": () => {
+        const hello = safe_guard(function hello(greet, ...people) {
+            return greet + " " + people.join(", ")
+        })
+
+        hello(1);
+        hello(1, 2);
+        hello(1, 2, 3);
+        expect(() => hello()).to.throw(/Missing 1/);
+    },
 }
 
 for (const name in tests) {

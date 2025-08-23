@@ -11,14 +11,19 @@
  */
 function safe_guard(object) {
 
+    function parse_args(source) {
+        const match = source.match(/\(([^)]*)\)/);
+        if (!match || !match[1].trim()) return 0;
+        if (match[1].includes("...")) return Infinity;
+        return match[1].split(",").length;
+    }
+
     const function_handler = {
         apply(target, thisArg, args) {
             const min = target.length;
 
             const source = target.toString();
-            const match = source.match(/\(([^)]*)\)/);
-            const max = match && match[1].trim()
-                ? match[1].split(",").length : 0;
+            const max = parse_args(source);
 
             if (args.length < min) throw new Error(`Missing ${min - args.length} arguments`);
             if (args.length > max) throw new Error(`Overflowed ${args.length - max} arguments`);
