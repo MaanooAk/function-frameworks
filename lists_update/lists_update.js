@@ -112,6 +112,7 @@ function lists_update(root = document, options) {
     function update_list(element, container, provider, keys, template_html, options) {
         const current_list = provider(element, find_context(element));
 
+        // TODO replace the mapping to reduce garbage
         const current_keys = current_list.map(i => options.key(i));
         if (same_arrays(current_keys, keys)) return;
 
