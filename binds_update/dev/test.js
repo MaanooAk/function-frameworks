@@ -181,6 +181,31 @@ var tests = {
         expect(el.innerHTML).eq(`<div data-bond="yes: 123.12">yes</div>`);
         el.remove()
     },
+    "once binds": () => {
+        const el = document.createElement("div");
+        global.incrementing = 1;
+        el.innerHTML = [
+            `<div data-bind="html: incrementing++"></div>`,
+            `<div data-bind="const: incrementing++"></div>`,
+        ].join("\n")
+        document.body.appendChild(el);
+        binds_update()
+        expect(el.innerHTML).eq([
+            `<div data-bond="html: incrementing++">1</div>`,
+            `<div data-bond="const: incrementing++">2</div>`,
+        ].join("\n"));
+        binds_update()
+        expect(el.innerHTML).eq([
+            `<div data-bond="html: incrementing++">3</div>`,
+            `<div data-bond="const: incrementing++">2</div>`,
+        ].join("\n"));
+        binds_update()
+        expect(el.innerHTML).eq([
+            `<div data-bond="html: incrementing++">4</div>`,
+            `<div data-bond="const: incrementing++">2</div>`,
+        ].join("\n"));
+        el.remove()
+    }
 }
 
 for (const name in tests) {

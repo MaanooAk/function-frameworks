@@ -61,6 +61,8 @@ function binds_update(root = document, options) {
         }
     }
 
+    const Done = Symbol();
+
     const types = {
         "html": (e, v) => e.innerHTML = v,
         "text": (e, v) => e.textContent = v,
@@ -69,6 +71,20 @@ function binds_update(root = document, options) {
         "checked": (e, v) => e.checked = !!v,
         "context": (e, v) => e.context = v,
         "hidden": (e, v) => e.hidden = !!v,
+        // once
+        "const": (e, v) => {
+            e.innerHTML = v
+            return Done
+        },
+        "tap": (e, v) => {
+            const callback = v
+            e.addEventListener("pointerup", (event) => {
+                callback(event)
+                event.stopPropagation()
+            })
+            e.classList.add("tap")
+            return Done
+        },
     }
     const dynamic_types = {
         "class-": (e, v, name) => v ? e.classList.add(name) : e.classList.remove(name),
@@ -119,12 +135,15 @@ function binds_update(root = document, options) {
         const provider = options.compiler(expr);
 
         let last = undefined;
+        let skip = false;
         return (ele) => {
+            if (skip) return false;
             if (options.visibility && !ele.parentElement.checkVisibility()) return false;
             const value = provider(ele, find_context(ele));
             if (value === last) return false;
             last = value;
-            handler(ele, value, name);
+            const res = handler(ele, value, name);
+            if (res === Done) skip = true;
             return true;
         }
     }
@@ -207,6 +226,8 @@ function binds_update(root = document, options) {
         const root_element = find_root(root);
         return update_inside(root_element);
     }
+
+    binds_update.Done = Done;
 
     return binds_update(document, options);
 }
