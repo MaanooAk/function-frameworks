@@ -11,7 +11,7 @@
  * 
  * - Return value of `false` from the callback will terminate the loop.
  *
- * @param {(delta: number) => void | boolean} [info] - The callback that will called every frame
+ * @param {(delta: number, last: boolean) => void | boolean} [info] - The callback that will called every frame
  * @param {Partial<StartUpdateOptions>} [options] - Optional configuration options.
  */
 function start_updater(updater, options) {
@@ -39,15 +39,15 @@ function start_updater(updater, options) {
         const res_delta = delta / resolution;
 
         if (res_delta <= max) {
-            if (updater(res_delta) === false) return;
+            if (updater(res_delta, true) === false) return;
 
         } else {
             let left = res_delta;
             while (left > max) {
-                if (updater(max) === false) return;
+                if (updater(max, false) === false) return;
                 left -= max;
             }
-            if (updater(left) === false) return;
+            if (updater(left, true) === false) return;
         }
 
         requestAnimationFrame(loop);

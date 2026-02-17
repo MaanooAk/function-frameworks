@@ -13,6 +13,7 @@ object: (delta) => {}
 options: {
   init: true,
   resolution: 1000,
+  max: Infinity,
   now: performance.now,
 }
 ```
@@ -25,4 +26,13 @@ start_updater(update);
 
 ```js
 start_updater((delta) => console.log(delta), { now: Date.now });
+```
+
+```js
+start_updater((delta, last) => {
+  logic_update(delta)
+  if (last) draw()
+}, {
+  max: 1,
+});
 ```
