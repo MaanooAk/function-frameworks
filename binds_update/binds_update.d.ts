@@ -9,6 +9,8 @@ declare type BindingTypes =
     | "checked"
     | "context"
     | "hidden"
+    | "visible"
+    | "if"
     | "class-"
     | "attr-"
     | "var-";
@@ -39,7 +41,7 @@ interface BindsUpdateOptions {
      * The default binding type to use when no type is specified in the binding expression.
      * @default "html"
      */
-    implicit: "html" | "text" | "value" | "checked" | "context" | "hidden";
+    implicit: "html" | "text" | "value" | "checked" | "context" | "hidden" | "visible";
 
     /**
      * The separator used for multiple binding expressions.

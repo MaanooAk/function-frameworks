@@ -32,6 +32,8 @@ value
 checked
 context
 hidden
+visible
+if
 class-[name]
 attr-[name]
 var-[name]

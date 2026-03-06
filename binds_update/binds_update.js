@@ -11,7 +11,7 @@
  * @param {Document | Element | string} [root=document] - Selector string or root element.
  * @param {Partial<BindsUpdateOptions>} options - Optional configuration options. 
  */
-function binds_update(root = document, options) {
+function binds_update(root = document, options = null) {
 
     const default_options = {
         attr: "data-bind",
@@ -64,13 +64,19 @@ function binds_update(root = document, options) {
     const Done = Symbol();
 
     const types = {
-        "html": (e, v) => e.innerHTML = v,
-        "text": (e, v) => e.textContent = v,
-        "number": (e, v) => e.textContent = v?.toLocaleString(),
+        "html": (e, v) => e.innerHTML = v ?? "",
+        "text": (e, v) => e.textContent = v ?? "",
+        "number": (e, v) => e.textContent = v?.toLocaleString() ?? "",
         "value": (e, v) => e.value = v,
         "checked": (e, v) => e.checked = !!v,
         "context": (e, v) => e.context = v,
         "hidden": (e, v) => e.hidden = !!v,
+        "visible": (e, v) => e.hidden = !v,
+        "if": (e,v) => {
+            const cond = !!v
+            if (e.children[0]) e.children[0].hidden = !cond
+            if (e.children[1]) e.children[1].hidden = cond
+        },
         // once
         "const": (e, v) => {
             e.innerHTML = v
@@ -131,10 +137,12 @@ function binds_update(root = document, options) {
         throw new Error(`Unknown dynamic type '${prefix}' in: ${text}`);
     }
 
+    const UniqNull = Symbol();
+
     function create_updater(handler, name, expr, options) {
         const provider = options.compiler(expr);
 
-        let last = undefined;
+        let last = UniqNull;
         let skip = false;
         return (ele) => {
             if (skip) return false;
@@ -148,10 +156,13 @@ function binds_update(root = document, options) {
         }
     }
 
-    function find_context(element) {
+    function find_context(element, grand = 0) {
         while (element) {
             const context = element.context;
-            if (context) return context;
+            if (context) {
+                if (grand === 0) return context
+                grand -=1
+            }
             element = element.parentElement;
         }
     }
