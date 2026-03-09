@@ -12,7 +12,7 @@
  * @param {Document | Element | string} [root=document] - Selector string or root element.
  * @param {Partial<ListsUpdateOptions>} options - Optional configuration options. 
  */
-function lists_update(root = document, options) {
+function lists_update(root = document, options = null) {
 
     const template_inflate_options = { html: false };
     const best_inflater = window.template_inflate ?

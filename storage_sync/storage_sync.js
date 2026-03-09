@@ -17,7 +17,7 @@
  * @param {string | Partial<StorageSyncInfo>} [info] - Name of the object in storage or an info object.
  * @param {Partial<StorageSyncOptions>} [options] - Optional configuration options.
  */
-function storage_sync(object, info, options) {
+function storage_sync(object = null, info = null, options = null) {
 
     const default_options = {
         prefix: "Storage",

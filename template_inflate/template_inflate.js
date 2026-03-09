@@ -14,7 +14,7 @@
  * @param {Partial<TemplateInflateOptions>} [options] - Optional configuration options.
  * @returns {string | HTMLElement} The resulting HTML string or DOM element, depending on the `html` option.
  */
-function template_inflate(template, self, options) {
+function template_inflate(template, self, options = null) {
 
     const default_options = {
         open: "{{",

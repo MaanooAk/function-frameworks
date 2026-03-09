@@ -1,5 +1,5 @@
 
-function canvas_loop(canvas_element, updater) {
+function canvas_loop(canvas_element = null, updater = null) {
 
     function find_canvas(canvas_element) {
         if (canvas_element instanceof HTMLCanvasElement) return canvas_element;

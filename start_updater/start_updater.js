@@ -14,7 +14,7 @@
  * @param {(delta: number, last: boolean) => void | boolean} [info] - The callback that will called every frame
  * @param {Partial<StartUpdateOptions>} [options] - Optional configuration options.
  */
-function start_updater(updater, options) {
+function start_updater(updater = null, options = null) {
 
     const default_options = {
         init: true,
