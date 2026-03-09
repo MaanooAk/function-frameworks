@@ -188,7 +188,9 @@ function template_inflate(template, self, options = null) {
     function create_element(html) {
         const holder = document.createElement("div");
         holder.innerHTML = html;
-        return holder.children[0];
+        if (holder.children.length <= 1) return holder.children[0];
+        holder.setAttribute("class", "contents");
+        return holder;
     }
 
     template_inflate = function template_inflate(template, self, options_param) {
