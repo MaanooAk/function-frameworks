@@ -149,6 +149,7 @@ var tests = {
         global.something = [1];
 
         expect(() => lists_update(el)).to.throw(/Template with id 'template-missingTemplate' not found/);
+        el.remove()
     },
     "throws on bad root selector": () => {
         expect(() => lists_update("#no-such-id")).to.throw(/Root selects no elements/);
@@ -176,6 +177,7 @@ var tests = {
         global.something = ["bad"];
 
         expect(() => lists_update(el)).to.throw(/Template must contain an element/);
+        el.remove()
     },
     "shuffling list": () => {
         const el = document.createElement("div");
@@ -212,6 +214,36 @@ var tests = {
             lists_update(el);
             expect(container.innerHTML).eq(global.something.map(i => `<p>${i}</p>`).join(""));
         }
+    },
+    "template root": () => {
+        const el = document.createElement("div");
+        el.innerHTML = `
+            <template id="template-root-1" class="test" data-list="something">
+                <span>Value: {{}}</span>
+            </div>
+        `;
+        document.body.appendChild(el);
+        const original = el.querySelector("template")
+        expect(original.parentElement).to.not.be.null;
+
+        global.something = [10, 20];
+        lists_update();
+
+        expect(original.parentElement).to.be.null;
+
+        const container = document.querySelector("div#template-root-1.test[data-listing]");
+        expect(container.innerHTML.trim()).to.eq([
+            `<span>Value: 10</span>`,
+            `<span>Value: 20</span>`
+        ].join(""));
+
+        global.something = [100, 200, 300];
+        lists_update();
+        expect(container.innerHTML.trim()).to.eq([
+            `<span>Value: 100</span>`,
+            `<span>Value: 200</span>`,
+            `<span>Value: 300</span>`
+        ].join(""));
     },
 }
 

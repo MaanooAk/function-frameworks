@@ -88,7 +88,15 @@ function lists_update(root = document, options = null) {
         const template_name = options.prefix + name;
 
         let template_element = element.querySelector("template");
-        if (template_element) {
+        if (element.tagName == "TEMPLATE") {
+            const holder = document.createElement('div');
+            for (const { name, value } of element.attributes) {
+                holder.setAttribute(name, value);
+            }
+            element.replaceWith(holder)
+            template_element = element
+            element = holder
+        } else if (template_element) {
             if (name && template_element.id && template_element.id != template_name) {
                 throw new Error(`Template id mismatch, expected ${template_name}`);
             }
@@ -281,9 +289,9 @@ function lists_update(root = document, options = null) {
             elements.push(entry)
 
             if (!options.consume) {
-                element.setAttribute(options.reflect, element.getAttribute(options.attr));
+                entry.element.setAttribute(options.reflect, entry.element.getAttribute(options.attr));
             }
-            element.removeAttribute(options.attr);
+            entry.element.removeAttribute(options.attr);
         }
 
         if (elements_dead > elements.length / 2) {

@@ -51,6 +51,18 @@ The default _placeholder_
 ```
 
 ```html
+<template class="list" data-list="state.items">
+    <div class="item">Item: {{}}</div>
+</template>
+⇓
+<div class="list" data-listing="state.items">
+    <div class="item">Item: A</div>
+    <div class="item">Item: B</div>
+    <div class="item">Item: C</div>
+</div>
+```
+
+```html
 <template id="template-item">
     <div class="item">Item: {{}}</div>
 </template>

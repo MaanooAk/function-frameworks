@@ -281,6 +281,14 @@ var tests = {
         expect(() => template_inflate(`<template><template>{{}}</template>{{}}</template><template>{{}}`)).to.throw();
         expect(() => template_inflate(`<template></template></template><template>{{}}`)).to.throw();
     },
+    "template multiple root children": () => {
+        const template = document.createElement("template");
+        template.innerHTML = "<div>{{ self.value }}</div><div>{{ self.value + 1 }}</div>";
+        const result_html = template_inflate(template, { value: 66 }, { html: true });
+        expect(result_html).eq(`<div>66</div><div>67</div>`);
+        const result_element = template_inflate(template, { value: 66 }, { html: false }).outerHTML;
+        expect(result_element).eq(`<div class="contents"><div>66</div><div>67</div></div>`);
+    }
 }
 
 for (const name in tests) {
