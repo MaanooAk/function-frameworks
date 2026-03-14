@@ -17,7 +17,7 @@ export type StartUpdateOptions = {
  * 
  * - Return value of `false` from the callback will terminate the loop.
  *
- * @param {(delta: number, last: boolean) => void | boolean} [info] - The callback that will be called every frame
+ * @param {(delta: number, last: boolean, total: number) => void | boolean} [info] - The callback that will be called every frame
  * @param {Partial<StartUpdateOptions>} [options] - Optional configuration options.
  */
 declare function start_updater(
