@@ -1,6 +1,6 @@
 /**
  * lists_update.js
- * version: 0.1
+ * version: 0.2
  * author: Akritas Akritidis
  * repo: https://github.com/MaanooAk/function-frameworks
  */
