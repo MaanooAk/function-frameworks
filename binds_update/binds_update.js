@@ -91,6 +91,15 @@ function binds_update(root = document, options = null) {
             e.classList.add("tap")
             return Done
         },
+        "click": (e, v) => {
+            const callback = v
+            e.addEventListener("click", (event) => {
+                callback(event)
+                event.stopPropagation()
+            })
+            e.classList.add("click")
+            return Done
+        },
     }
     const dynamic_types = {
         "class-": (e, v, name) => v ? e.classList.add(name) : e.classList.remove(name),
